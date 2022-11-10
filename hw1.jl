@@ -597,11 +597,13 @@ md"""
 
 # ╔═╡ ee5f21fb-1076-42b6-8926-8bbb6ed0ad67
 function custom_filter(pixel::AbstractRGB)
+	colors = [pixel.r, pixel.g, pixel.b] * 5
 	
-	# your code here!
-	
-	return pixel
+	return RGB(cos.(colors)...)
 end
+
+# ╔═╡ 1c61f2a5-9441-4c68-9c67-809bb595cc73
+cos.([0.3,1,1])
 
 # ╔═╡ 9e5a08dd-332a-486b-94ab-15c49e72e522
 function custom_filter(image::AbstractMatrix)
@@ -2306,6 +2308,7 @@ version = "17.4.0+0"
 # ╟─87dabfd2-461e-4769-ad0f-132cb2370b88
 # ╠═8917529e-fa7a-412b-8aea-54f92f6270fa
 # ╠═ee5f21fb-1076-42b6-8926-8bbb6ed0ad67
+# ╠═1c61f2a5-9441-4c68-9c67-809bb595cc73
 # ╠═9e5a08dd-332a-486b-94ab-15c49e72e522
 # ╟─91f4778e-ee20-11ea-1b7e-2b0892bd3c0f
 # ╟─8ffe16ce-ee20-11ea-18bd-15640f94b839
