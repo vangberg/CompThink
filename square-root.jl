@@ -32,47 +32,51 @@ First we define a function that takes `x` and `a`, and returns a tupple of `(x, 
 
 # ╔═╡ b0b870bb-644f-45ba-884e-c4c376161ffd
 # return an array of tuples with (x, a, x/a)
-function square_root(iterations, x, a)
-	this_row = [x a x/a]
-
-	if iterations == 1
-		return this_row
-	else
-		next_rows = 
-			square_root(
-				iterations - 1,
-				x,
-				# for the next iteration, we set `a` to the
-				# average value of `a` and `x/a`
-				(a + x/a) / 2
-			)
-		return [
-			this_row
-			next_rows
-		]
+function square_root(range::AbstractRange, x, a)
+	# x y u v for `quiver()`
+	m = [first(range) a 0 ((x/a) - a)]
+	
+	if length(range) == 1
+		return m
 	end
+
+	return [
+		m
+		square_root(
+			(first(range) + 1):last(range),
+			x,
+			# for the next iteration, we set `a` to the
+			# average value of `a` and `x/a`
+			(a + x/a) / 2
+		)
+	]
 end
 
-# ╔═╡ 0ba1375c-a062-4b8f-b53f-82ef61077fe5
-begin
-	iterations = 5
-	x = 10
-end
+# ╔═╡ ea5e6b46-4644-44fe-839f-17926da52b01
+step
+
+# ╔═╡ b590b775-b38a-46f3-9e13-44079f14920d
+x = 10
 
 # ╔═╡ 9fffc46e-6681-44a3-ae33-664a146c2c18
 md"""
-Initial value of `a`:
+Initial guess:
 """
 
 # ╔═╡ afde8f44-c158-4a0e-a703-ae800c85ff86
-@bind a Slider(1:10)
+@bind a Slider(1:x, default=1, show_value=true)
+
+# ╔═╡ f1d49ded-8973-4e2f-af9c-0d4386a94f92
+data = square_root(1:10, x, a)
 
 # ╔═╡ e76c272a-4e23-4160-a62a-6a564b991938
-plot(
-	square_root(iterations, x, a),
-	markershape=:circle,
-	label=["x" "a" "x/a"],
-	ylims=[0, 10 + 2]
+quiver(
+	data[:, 1],
+	data[:, 2],
+	quivers=(data[:, 3], data[:, 4]),
+	# markershape=:circle,
+	# label=["x" "a" "x/a"],
+	ylims=[0, x + 2]
 )
 
 # ╔═╡ 00000000-0000-0000-0000-000000000001
@@ -92,7 +96,7 @@ PLUTO_MANIFEST_TOML_CONTENTS = """
 
 julia_version = "1.8.2"
 manifest_format = "2.0"
-project_hash = "007fbb57db0277a809224fb92fc2c3ad5ea07613"
+project_hash = "d43de6d52574d38b1e508f464563112f80896af3"
 
 [[deps.AbstractPlutoDingetjes]]
 deps = ["Pkg"]
@@ -1054,11 +1058,13 @@ version = "1.4.1+0"
 # ╔═╡ Cell order:
 # ╟─61ff75d5-6959-4e87-ac34-bf45fecc9d78
 # ╟─e20f1106-5372-4bd3-b857-8d9b46b33abd
-# ╟─b0b870bb-644f-45ba-884e-c4c376161ffd
-# ╠═0ba1375c-a062-4b8f-b53f-82ef61077fe5
+# ╠═b0b870bb-644f-45ba-884e-c4c376161ffd
+# ╠═ea5e6b46-4644-44fe-839f-17926da52b01
+# ╟─b590b775-b38a-46f3-9e13-44079f14920d
+# ╠═f1d49ded-8973-4e2f-af9c-0d4386a94f92
 # ╠═e76c272a-4e23-4160-a62a-6a564b991938
 # ╟─9fffc46e-6681-44a3-ae33-664a146c2c18
-# ╠═afde8f44-c158-4a0e-a703-ae800c85ff86
-# ╠═291f89f5-cf41-4da9-ac56-77f09e92435d
+# ╟─afde8f44-c158-4a0e-a703-ae800c85ff86
+# ╟─291f89f5-cf41-4da9-ac56-77f09e92435d
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002
